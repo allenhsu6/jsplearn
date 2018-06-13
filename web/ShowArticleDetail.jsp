@@ -16,25 +16,33 @@
     Connection connection = DriverManager.getConnection(url,"root","332999");
     Statement statement = connection.createStatement();
     ResultSet resultSet = statement.executeQuery("select * from article where id ="+id);
-    while (resultSet.next()){
-        str += "<tr><td>" +id+"</td><td>"+
-                resultSet.getString("cont")+
-                "</a>"+"</td></tr>";
-    }
 %>
 
-<%
-    resultSet.close();
-    statement.close();
-    connection.close();
-%>
 <html>
 <head>
     <title>帖子内容</title>
 </head>
 <body>
-<table bgcolor="#faebd7" align="center" width="2">
-    <%=str%>
+<table bgcolor="#ff7f50" align="center" border="2">
+    <%
+        while (resultSet.next()){
+            %>
+    <tr><td>编号</td><td align="center"><%=resultSet.getInt("id")%></td></tr>
+    <tr><td>标题</td><td><%=resultSet.getString("title")%></td></tr>
+    <tr><td>内容</td><td><%=resultSet.getString("cont")%></td></tr>
+    <tr><td colspan="2" align="center"><a href="Reply.jsp?id=<%=resultSet.getInt("id")%>&rootid=<%=resultSet.getInt("rootid")%>">回复</a>
+    </td></tr>
+
 </table>
+
+    <%
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+    %>
+
+
+
 </body>
 </html>

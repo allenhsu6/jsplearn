@@ -14,8 +14,9 @@
 
     Statement statement = connection.createStatement();
     ResultSet resultSet = statement.executeQuery("select * from article where pid = 0");
+   // str = "";
     while (resultSet.next()){
-        str += "<tr><td>" + resultSet.getInt("id") +"</td><td>"+
+        str = "<tr><td>" + resultSet.getInt("id") +"</td><td>"+
                 "<a href='ShowArticleDetail.jsp?id="+
                 resultSet.getInt("id")+"'>"+
                 resultSet.getString("title")+
@@ -77,8 +78,10 @@
     <title>树状BBS</title>
 </head>
 <body>
-<table border="1" bgcolor="#8a2be2">
+<table border="1" bgcolor="#ffebcd">
+
     <%=str%>
+
 </table>
 </body>
 </html>
