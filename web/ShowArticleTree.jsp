@@ -20,7 +20,10 @@
                 "<a href='ShowArticleDetail.jsp?id="+
                 resultSet.getInt("id")+"'>"+
                 resultSet.getString("title")+
-                "</a>"+"</td></tr>";
+                "</a>"+"</td><td><a href='Delete.jsp?id="+
+                resultSet.getInt("id")+
+                "&pid="+resultSet.getInt("pid")+
+                "'>删除</a></td></tr>";
         if (resultSet.getInt("isleaf")!=0){
             tree(connection,resultSet.getInt("id"),1);
         }
@@ -45,7 +48,10 @@
                         resultSet.getInt("id")+"'>"+
                         resultSet.getString("title")+
                         "</a>"+
-                        "</td></tr>";
+                        "</td><td><a href='Delete.jsp?id="+
+                        resultSet.getInt("id")+
+                        "&pid="+resultSet.getInt("pid")+
+                        "'>删除</a></td></tr>";
                 if (resultSet.getInt("isleaf")!=0){
                     tree(connection,resultSet.getInt("id"),level+1);
                 }
