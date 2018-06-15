@@ -6,7 +6,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" import="java.sql.*" %>
-<%@ page import="java.awt.desktop.SystemEventListener" %>
+<%
+    String admin = (String) session.getAttribute("admin");
+    if (admin == null || !admin.equals("true")){
+        out.println("套路很深");
+        return;
+    }
+%>
+
 <%
     String strID = request.getParameter("id");
     int id = Integer.parseInt(strID);
