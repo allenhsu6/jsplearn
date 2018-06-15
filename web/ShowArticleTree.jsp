@@ -6,7 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@page import="java.sql.*" %>
-
+<%
+    String admin = (String) session.getAttribute("admin");
+    if (admin != null && admin.equals("true"))
+    {
+     login = true;
+    }
+%>
 <%
     Class.forName("com.mysql.jdbc.Driver");
     String url = "jdbc:mysql://localhost:3306/bbs?characterEncoding=utf8&useSSL=false";
@@ -14,22 +20,31 @@
 
     Statement statement = connection.createStatement();
     ResultSet resultSet = statement.executeQuery("select * from article where pid = 0");
-   // str = "";
+
+
     while (resultSet.next()){
-        str = "<tr><td>" + resultSet.getInt("id") +"</td><td>"+
+
+        String strlogin = "";
+        if (login == true){
+            strlogin =" <td><a href='Delete.jsp?id="+
+                    resultSet.getInt("id")+
+                    "&pid="+resultSet.getInt("pid")+
+                    "'>删除</a></td>";
+        }
+
+        str += "<tr><td>" + resultSet.getInt("id") +"</td><td>"+
                 "<a href='ShowArticleDetail.jsp?id="+
                 resultSet.getInt("id")+"'>"+
                 resultSet.getString("title")+
-                "</a>"+"</td><td><a href='Delete.jsp?id="+
-                resultSet.getInt("id")+
-                "&pid="+resultSet.getInt("pid")+
-                "'>删除</a></td></tr>";
+                "</a>"+strlogin+"</td></tr>";
         if (resultSet.getInt("isleaf")!=0){
             tree(connection,resultSet.getInt("id"),1);
         }
     }
 %>
 <%!
+
+    boolean login = false;
     String str = "";
     private void tree(Connection connection, int id, int level){
         Statement statement = null;
@@ -42,16 +57,25 @@
             statement = connection.createStatement();
             String sql =  "select * from article where pid = " + id;
             resultSet = statement.executeQuery(sql);
+
+
+
             while (resultSet.next()){
+
+                String strlogin = "";
+                if (login == true){
+                    strlogin =" <td><a href='Delete.jsp?id="+
+                            resultSet.getInt("id")+
+                            "&pid="+resultSet.getInt("pid")+
+                            "'>删除</a></td>";
+                }
+
                 str += "<tr><td>" + resultSet.getInt("id") +"</td><td>"+
                         preStr+"<a href='ShowArticleDetail.jsp?id="+
                         resultSet.getInt("id")+"'>"+
                         resultSet.getString("title")+
                         "</a>"+
-                        "</td><td><a href='Delete.jsp?id="+
-                        resultSet.getInt("id")+
-                        "&pid="+resultSet.getInt("pid")+
-                        "'>删除</a></td></tr>";
+                        "</td>"+strlogin+"</tr>";
                 if (resultSet.getInt("isleaf")!=0){
                     tree(connection,resultSet.getInt("id"),level+1);
                 }
@@ -84,10 +108,17 @@
     <title>树状BBS</title>
 </head>
 <body>
+<a href="Post.jsp" >发布新帖</a>
 <table border="1" bgcolor="#ffebcd">
 
     <%=str%>
+    <%
+      str = "";
+      login = false;
+    %>
+
 
 </table>
 </body>
 </html>
+
