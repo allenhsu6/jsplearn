@@ -37,11 +37,8 @@
     ResultSet rsKey = preparedStatement.getGeneratedKeys();
     rsKey.next();
     int Key = rsKey.getInt(1);
-    System.out.println(Key);
     rsKey.close();
-    String sql1 = "update article set rootid =";
-    String sql2 = "where id =";
-    statement.executeUpdate( "update article set rootid = " + Key + "where id =" + Key);
+    statement.executeUpdate( "update article set rootid = " + Key + " where id = " + Key);
     //预防断电，手动提交
     connection.commit();
     connection.setAutoCommit(true);
@@ -50,7 +47,7 @@
     preparedStatement.close();
     connection.close();
 
-    response.sendRedirect("ShowArticleTree.jsp");
+    response.sendRedirect("ShowArticleFlat.jsp");
     }
 
 %>
